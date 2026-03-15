@@ -68,15 +68,6 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Check if deploy button trigger
-        id: check-deploy-button
-        run: |
-          if [[ "${{ github.event_name }}" == "repository_dispatch" && "${{ github.event.action }}" == "deploy-spa-button" ]]; then
-            echo "is_deploy_button=true" >> $GITHUB_OUTPUT
-          else
-            echo "is_deploy_button=false" >> $GITHUB_OUTPUT
-          fi
-
       # ==================== 步骤 1：构建前端 ====================
       - name: Install frontend dependencies
         working-directory: ./frontend
@@ -237,7 +228,7 @@ jobs:
 
       # ==================== 步骤 6：部署后验证 ====================
       - name: Display Success Information
-        if: steps.check-deploy-button.outputs.is_deploy_button == 'true' && success()
+        if: success()
         run: |
           echo "===================================================="
           echo "🎉 CloudPaste SPA 已成功部署到 Cloudflare Workers!"
